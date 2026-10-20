@@ -401,7 +401,7 @@ def create_adapter(
 
     Args:
         provider: Provider identifier (openai, gemini, xai, nova, qwen,
-            livekit).
+            phonic, livekit).
         tick_duration_ms: Duration of each tick in milliseconds.
         send_audio_instant: If True, send audio in one call per tick.
         model: Model identifier. If None, uses the provider's default.
@@ -530,6 +530,17 @@ def create_adapter(
         )
 
         adapter = DiscreteTimeQwenAdapter(
+            tick_duration_ms=tick_duration_ms,
+            send_audio_instant=send_audio_instant,
+            model=model,
+            reasoning_effort=reasoning_effort,
+        )
+    elif provider == "phonic":
+        from tau2.voice.audio_native.phonic.discrete_time_adapter import (
+            DiscreteTimePhonicAdapter,
+        )
+
+        adapter = DiscreteTimePhonicAdapter(
             tick_duration_ms=tick_duration_ms,
             send_audio_instant=send_audio_instant,
             model=model,

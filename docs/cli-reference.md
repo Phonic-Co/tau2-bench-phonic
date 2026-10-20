@@ -735,7 +735,7 @@ usage: tau2 run [-h] [--communicate-scorer {semantic,substring}]
                 [--max-retries MAX_RETRIES] [--retry-delay RETRY_DELAY]
                 [--enforce-communication-protocol] [--user-persona USER_PERSONA]
                 [--audio-native]
-                [--audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,livekit,launa}]
+                [--audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,phonic,livekit,launa}]
                 [--cascaded-config CASCADED_CONFIG]
                 [--audio-native-model AUDIO_NATIVE_MODEL] [--live-config LIVE_CONFIG]
                 [--realtime-generation | --no-realtime-generation]
@@ -886,7 +886,7 @@ options:
   --audio-native        Enable audio-native mode using DiscreteTimeAudioNativeAgent
                         with VoiceStreamingUserSimulator. This enables full-duplex
                         voice simulation using audio native APIs.
-  --audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,livekit,launa}
+  --audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,phonic,livekit,launa}
                         Audio native API provider. Default is 'openai'.
   --cascaded-config CASCADED_CONFIG
                         Cascaded config preset name for livekit provider. Available
@@ -1007,7 +1007,7 @@ usage: tau2 run-pass3 [-h] [--communicate-scorer {semantic,substring}]
                       [--max-retries MAX_RETRIES] [--retry-delay RETRY_DELAY]
                       [--enforce-communication-protocol] [--user-persona USER_PERSONA]
                       [--audio-native]
-                      [--audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,livekit,launa}]
+                      [--audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,phonic,livekit,launa}]
                       [--cascaded-config CASCADED_CONFIG]
                       [--audio-native-model AUDIO_NATIVE_MODEL]
                       [--live-config LIVE_CONFIG]
@@ -1162,7 +1162,7 @@ options:
   --audio-native        Enable audio-native mode using DiscreteTimeAudioNativeAgent
                         with VoiceStreamingUserSimulator. This enables full-duplex
                         voice simulation using audio native APIs.
-  --audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,livekit,launa}
+  --audio-native-provider {openai,openai_live,gemini,xai,nova,qwen,phonic,livekit,launa}
                         Audio native API provider. Default is 'openai'.
   --cascaded-config CASCADED_CONFIG
                         Cascaded config preset name for livekit provider. Available

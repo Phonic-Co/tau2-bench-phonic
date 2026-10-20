@@ -85,7 +85,7 @@ from tau2.voice.pricing import compute_tick_cost
 
 # Provider type alias
 AudioNativeProvider = Literal[
-    "openai", "openai_live", "gemini", "xai", "nova", "qwen", "livekit"
+    "openai", "openai_live", "gemini", "xai", "nova", "qwen", "phonic", "livekit"
 ]
 
 # VAD config union type (string annotations for lazy resolution)
@@ -330,6 +330,9 @@ class DiscreteTimeAudioNativeAgent(FullDuplexAgent[DiscreteTimeAgentState]):
             from tau2.voice.audio_native.qwen.provider import QwenVADConfig
 
             self.vad_config = QwenVADConfig()
+        elif provider == "phonic":
+            # Phonic's speech recognition does its own turn detection.
+            self.vad_config = None
         elif provider == "livekit":
             from tau2.voice.audio_native.livekit.discrete_time_adapter import (
                 LiveKitVADConfig,

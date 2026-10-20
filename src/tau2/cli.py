@@ -276,6 +276,7 @@ def add_run_args(parser):
             "xai",
             "nova",
             "qwen",
+            "phonic",
             "livekit",
             "launa",
         ],
