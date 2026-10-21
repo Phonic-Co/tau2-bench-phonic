@@ -11,10 +11,16 @@ from tau2.data_model.simulation import (
     TerminationReason,
     VoiceRunConfig,
 )
-from tau2.multilingual.runtime import load_language
+from tau2.metrics.benchmark import _authoritative_language
+from tau2.multilingual.runtime import load_language, reload_call_language, resolve_task
 from tau2.runner.cli import check_benchmark_selection
 from tau2.runner.helpers import get_info
-from tau2.runner.presets import BenchmarkRequest, load_frame, resolve_benchmark
+from tau2.runner.presets import (
+    BenchmarkRequest,
+    load_cell_language,
+    load_frame,
+    resolve_benchmark,
+)
 from tau2.scripts.leaderboard.prepare_submission import validate_submission_traj_set
 from tau2.task_subsets.store import load_frame as load_canonical_frame
 
@@ -191,3 +197,26 @@ def test_voice_v1_submission_requires_the_recorded_full_domain(tmp_path):
     unmarked.info.benchmark = None
     assert "mix benchmark modes" in validate_submission_traj_set([results, unmarked])[1]
     assert validate_submission_traj_set([unmarked])[0]
+
+
+@pytest.mark.parametrize("domain", ["airline", "retail", "telecom"])
+def test_voice_v1_calls_and_export_reload_the_pinned_binding(domain):
+    """Voice V1 pins the canonical task set, also where the pack publishes a
+    tasks file (retail, telecom); the per-call reload and the authoritative
+    export must load that same binding."""
+    frame = load_frame("voice-v1")
+    cell = next(cell for cell in frame.cells if cell.domain == domain)
+    plan = load_cell_language(
+        cell.language, cell.domain, frame.mode, canonical_tasks=True
+    )
+    context = resolve_task(plan, plan.tasks[0], 300)
+    reloaded = reload_call_language(context, cell.domain)
+    assert reloaded.artifact_pins == context.artifact_pins
+    authoritative = _authoritative_language(
+        cell.language,
+        cell.domain,
+        cell.binding_revision,
+        frame.mode,
+        canonical_tasks=True,
+    )
+    assert authoritative.artifact_pins == plan.artifact_pins

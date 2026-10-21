@@ -909,14 +909,23 @@ def language_environment_kwargs(loaded: LoadedLanguage) -> dict:
 
 def reload_call_language(context: LanguageTaskInfo, domain: str) -> LoadedLanguage:
     """Reload exactly the binding a recorded call used, rejecting any drift."""
-    loaded = load_language(
-        context.language,
-        domain,
-        mode=context.mode,
-        localize_db=context.scenario_mode != "canonical",
-        selection=context.task_selection,
-        pack_extension=context.pack_extension,
-    )
+
+    def load(canonical_tasks: bool) -> LoadedLanguage:
+        return load_language(
+            context.language,
+            domain,
+            mode=context.mode,
+            localize_db=context.scenario_mode != "canonical",
+            selection=context.task_selection,
+            pack_extension=context.pack_extension,
+            canonical_tasks=canonical_tasks,
+        )
+
+    loaded = load(canonical_tasks=False)
+    if loaded.artifact_pins != context.artifact_pins:
+        # voice-v1 binds the canonical task set even where the pack also
+        # publishes a tasks file (retail, telecom); the pins still must match.
+        loaded = load(canonical_tasks=True)
     if loaded.artifact_pins != context.artifact_pins:
         raise ValueError("published language artifacts differ from the recorded call")
     return loaded
